@@ -1,0 +1,62 @@
+Here are some functions you can use to command the UFactory Lite 6. Please refer to 
+https://github.com/xArm-Developer/xArm-Python-SDK/blob/master/doc/api/xarm_api.md to understand how to use each function. IMPORTANT Note that you do NOT need to perform any initialization/disconnection, etc the part to connect to the arm or to create an instance of the arm. You do not need to include the import of the xArm API Only provide the functions to perform the said task
+
+Moving :
+arm.reset(...)
+arm.set_position(...)
+arm.set_servo_angle(...)
+arm.set_servo_angle_j(...)
+arm.set_servo_cartesian(...)
+arm.move_gohome(...)
+arm.move_circle(...)
+arm.emergency_stop()
+arm.set_position_aa(...)
+arm.set_servo_cartesian_aa(...)
+arm.vc_set_joint_velocity(...)
+arm.vc_set_cartesian_velocity(...)
+
+Set :
+arm.set_servo_attach(...)
+arm.set_servo_detach(...)
+arm.set_state(...)
+arm.set_mode(...)
+arm.motion_enable(...)
+arm.set_pause_time(...)
+
+Get : 
+arm.get_version()
+arm.get_state()
+arm.get_is_moving()
+arm.get_cmdnum()
+arm.get_err_warn_code()
+arm.get_position(...)
+arm.get_servo_angle(...)
+arm.get_position_aa(...)
+arm.get_pose_offset(...)
+
+Setting :
+arm.set_tcp_offset(...)
+arm.set_tcp_jerk(...)
+arm.set_tcp_maxacc(...)
+arm.set_joint_jerk(...)
+arm.set_joint_maxacc(...)
+arm.set_tcp_load(...)
+arm.set_collision_sensitivity(...)
+arm.set_teach_sensitivity(...)
+arm.set_gravity_direction(...)
+arm.config_tgpio_reset_when_stop(...)
+arm.config_cgpio_reset_when_stop(...)
+arm.set_report_tau_or_i(...)
+arm.set_self_collision_detection(...)
+arm.set_collision_tool_model(...)
+arm.clean_conf()
+arm.save_conf()
+
+Gripper :
+arm.set_gripper_enable(...)
+arm.set_gripper_mode(...)
+arm.set_gripper_speed(...)
+arm.set_gripper_position(...)
+arm.get_gripper_position()
+arm.get_gripper_err_code()
+arm.clean_gripper_error()

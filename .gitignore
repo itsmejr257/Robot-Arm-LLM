@@ -1,0 +1,7 @@
+detector_test.py
+speechNoArmMovement.py
+speech.mp3
+yolov5m.pt
+yolov5s.pt
+yolov8s.pt
+__pycache__/
