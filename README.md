@@ -89,5 +89,10 @@ This projects utilizes features present in the OpenAi API (ChatGPT4o) to create 
    ```
    Within the file
    ```python
+   ##FOR IMPORTS
    from detector import detect #Use this if using yolov5
    from v8detector import detect #Use this if using yolov8
+
+   
+   ```
+
