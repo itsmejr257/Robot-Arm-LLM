@@ -1,7 +1,7 @@
 from openai import OpenAI
 from xarm.wrapper import XArmAPI
-#from detector import detect
-from v8detector import detect
+from detector import detect
+#from v8detector import detect
 import json
 from functionsrealsense import *
 from openai import OpenAI
@@ -18,6 +18,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--sysprompt", type=str, default="system_prompts/lite6_realsense.txt")
 args = parser.parse_args()
 
+"""
 ip = '192.168.1.189'
 arm = XArmAPI(ip)
 arm.motion_enable(enable=True)
@@ -25,6 +26,7 @@ arm.set_mode(0)  # Set the arm to position control mode
 arm.set_state(state=0)
 
 return_home()
+"""
 
 armFunction = [
     {
@@ -46,6 +48,10 @@ armFunction = [
             },
             "required": ["x", "y"]
         }
+    },
+    {
+        "name" : "look_forward",
+        "description": "Positions the arm to look forward"
     }
 ]
 
@@ -70,6 +76,25 @@ completion = client.chat.completions.create(
     messages = messages,
     functions = armFunction
 )
+
+def listen_for_wake_word(wake_word="hello robot"):
+    recognizer = sr.Recognizer()
+
+    with sr.Microphone() as source:
+        print("Listening for the wake word...")
+        recognizer.adjust_for_ambient_noise(source)
+
+        while True:
+            audio_data = recognizer.listen(source)
+            try:
+                text = recognizer.recognize_google(audio_data).lower()
+                if wake_word in text:
+                    print("Wake word detected!")
+                    return
+            except sr.UnknownValueError:
+                pass
+            except sr.RequestError:
+                print("Could not request results from Google Speech Recognition service")
 
 def recognize_speech_from_mic():
     recognizer = sr.Recognizer()
