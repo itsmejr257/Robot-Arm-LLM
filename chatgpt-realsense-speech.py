@@ -71,25 +71,6 @@ completion = client.chat.completions.create(
     functions = armFunction
 )
 
-def listen_for_wake_word(wake_word="hello robot"):
-    recognizer = sr.Recognizer()
-
-    with sr.Microphone() as source:
-        print("Listening for the wake word...")
-        recognizer.adjust_for_ambient_noise(source)
-
-        while True:
-            audio_data = recognizer.listen(source)
-            try:
-                text = recognizer.recognize_google(audio_data).lower()
-                if wake_word in text:
-                    print("Wake word detected!")
-                    return
-            except sr.UnknownValueError:
-                pass
-            except sr.RequestError:
-                print("Could not request results from Google Speech Recognition service")
-
 def recognize_speech_from_mic():
     recognizer = sr.Recognizer()
 

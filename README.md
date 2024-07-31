@@ -87,3 +87,7 @@ This projects utilizes features present in the OpenAi API (ChatGPT4o) to create 
    python3 chatgpt-realsense.py
    python3 chatgpt-realsense-speech.py #If you wish to communicate with robot via speech
    ```
+   Within the file
+   ```python
+   from detector import detect #Use this if using yolov5
+   from v8detector import detect #Use this if using yolov8

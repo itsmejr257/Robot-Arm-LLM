@@ -1,3 +1,4 @@
+## Use this if you wish for arm to move while it speaks
 from pathlib import Path
 from openai import OpenAI
 import os

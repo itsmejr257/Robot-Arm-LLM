@@ -7,6 +7,7 @@ import os
 import sys
 from xarm.wrapper import XArmAPI
 from speechNoArmMovement import speak
+import speech_recognition as sr
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--prompt", type=str, default="prompts/lite6_basic.txt")
@@ -45,6 +46,26 @@ chat_history = [
     """
     }
 ]
+
+def recognize_speech_from_mic():
+    recognizer = sr.Recognizer()
+
+    with sr.Microphone() as source:
+        recognizer.adjust_for_ambient_noise(source)
+        print("Listening for your speech...")
+
+        audio_data = recognizer.listen(source)
+        try:
+            print("Recognizing your speech...")
+            text = recognizer.recognize_google(audio_data)
+            print(f"You said: {text}")
+            return text
+        except sr.UnknownValueError:
+            print("Google Speech Recognition could not understand the audio")
+            raise Exception("Dont Understand")
+        except sr.RequestError:
+            print("Could not request results from Google Speech Recognition service")
+            raise Exception("Dont Understand")
 
 
 def ask(prompt):
@@ -124,6 +145,14 @@ print("Welcome to the Arm chatbot! What do you want me to do?")
 while True:
     question = input(colors.YELLOW + "Lite6> " + colors.ENDC)
 
+    """
+    try:
+        question = recognize_speech_from_mic()
+    except:
+        speak("sorry i couldnt catch what you were saying. Say it again")
+        continue
+        """
+    
     if question == "!quit" or question == "!exit":
         break
 

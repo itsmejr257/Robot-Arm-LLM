@@ -4,10 +4,12 @@ import pyrealsense2 as rs
 import torch
 import os
 from imageprocesschatgpt import *
+from ultralytics import YOLO
 
 def detect():
     # Load the YOLOv5 model
-    model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
+    #model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
+    model = YOLO('yolov8s.pt')
 
     # Set up the RealSense D455 camera
     pipeline = rs.pipeline()
