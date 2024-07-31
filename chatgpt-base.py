@@ -7,7 +7,9 @@ import os
 import sys
 from xarm.wrapper import XArmAPI
 from speechNoArmMovement import speak
+import threading
 import speech_recognition as sr
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--prompt", type=str, default="prompts/lite6_basic.txt")
@@ -39,33 +41,25 @@ chat_history = [
     {
     "role": "assistant",
     "content": """```python
-    current_position = arm.get_position()
-    arm.set_position(x=current_position[1][0], y=current_position[1][1] + 10, z=current_position[1][2])
-    ```
-    Hello Human i was waving to you!
+# Define the positions for the waving motion
+wave_positions = [
+    [200, 0, 200],  # Initial position
+    [200, 50, 200],  # Wave right
+    [200, -50, 200],  # Wave left
+    [200, 50, 200],  # Wave right
+    [200, -50, 200],  # Wave left
+    [200, 0, 200]  # Return to initial position
+]
+
+# Move to each position to simulate a wave
+for pos in wave_positions:
+    arm.set_position(x=pos[0], y=pos[1], z=pos[2])
+```
+
+    Hello Human! How is your day?
     """
     }
 ]
-
-def recognize_speech_from_mic():
-    recognizer = sr.Recognizer()
-
-    with sr.Microphone() as source:
-        recognizer.adjust_for_ambient_noise(source)
-        print("Listening for your speech...")
-
-        audio_data = recognizer.listen(source)
-        try:
-            print("Recognizing your speech...")
-            text = recognizer.recognize_google(audio_data)
-            print(f"You said: {text}")
-            return text
-        except sr.UnknownValueError:
-            print("Google Speech Recognition could not understand the audio")
-            raise Exception("Dont Understand")
-        except sr.RequestError:
-            print("Could not request results from Google Speech Recognition service")
-            raise Exception("Dont Understand")
 
 
 def ask(prompt):
@@ -126,14 +120,14 @@ class colors:  # You may need to change color settings
 
 ## Initialization of Arm ------------------------------------------
 print(f"Initializing Arm...")
-#ip = '192.168.1.189'
-#arm = XArmAPI(ip)
-#arm.motion_enable(enable=True)
-#arm.set_mode(0)
-#arm.set_state(state=0)
+ip = '192.168.1.189'
+arm = XArmAPI(ip)
+arm.motion_enable(enable=True)
+arm.set_mode(0)
+arm.set_state(state=0)
 
-#arm.reset(wait=True)
-#arm.set_position(208.8,-3.9,230.9)
+arm.reset(wait=True)
+arm.set_position(208.8,-3.9,230.9)
 print(f"Done.")
 
 with open(args.prompt, "r") as f:
@@ -142,6 +136,32 @@ with open(args.prompt, "r") as f:
 ask(prompt)
 print("Welcome to the Arm chatbot! What do you want me to do?")
 
+
+def run_code(code):
+    print("Please wait while I run the code in the Arm...")
+    exec(code)
+    print("Done!\n")
+
+def recognize_speech_from_mic():
+    recognizer = sr.Recognizer()
+
+    with sr.Microphone() as source:
+        recognizer.adjust_for_ambient_noise(source)
+        print("Listening for your speech...")
+
+        audio_data = recognizer.listen(source)
+        try:
+            print("Recognizing your speech...")
+            text = recognizer.recognize_google(audio_data)
+            print(f"You said: {text}")
+            return text
+        except sr.UnknownValueError:
+            print("Google Speech Recognition could not understand the audio")
+            raise Exception("Dont Understand")
+        except sr.RequestError:
+            print("Could not request results from Google Speech Recognition service")
+            raise Exception("Dont Understand")
+        
 while True:
     question = input(colors.YELLOW + "Lite6> " + colors.ENDC)
 
@@ -152,7 +172,7 @@ while True:
         speak("sorry i couldnt catch what you were saying. Say it again")
         continue
         """
-    
+
     if question == "!quit" or question == "!exit":
         break
 
@@ -166,11 +186,11 @@ while True:
 
     code = extract_python_code(response)
     text = extract_text(response)
-    if code is not None:
-        print("Please wait while I run the code in the Arm...")
-        #exec(extract_python_code(response))
-        print("Done!\n")
 
+    #move_thread = threading.Thread(target=run_code(code))
+    #move_thread.start()
+
+    print("Please wait while I run the code in the Arm...")
+    exec(extract_python_code(response))
+    print("Done!\n")
     speak(str(text))
-        
-    #arm.go_home()

@@ -1,7 +1,7 @@
 from openai import OpenAI
 from xarm.wrapper import XArmAPI
-#from detector import detect
-from v8detector import detect
+from detector import detect
+#from v8detector import detect
 import json
 from functionsrealsense import *
 from openai import OpenAI
